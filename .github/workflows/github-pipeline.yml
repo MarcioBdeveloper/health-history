@@ -23,21 +23,21 @@ jobs:
         run: |
           go mod tidy
 
-      - name: Check code formatting
+      - name: Install golangci-lint
         run: |
-          gofmt -l ./
-        continue-on-error: false
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
+          
+      - name: Check golangci-lint installation
+        run: |
+          ls $(go env GOPATH)/bin
+      
+      - name: Add golangci-lint to PATH
+        run: |
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
       - name: Run linters
-        run: |
-          golangci-lint run --timeout 5m
-        env:
-          GOLANGCI_LINT_CACHE: ${{ runner.temp }}/golangci-lint-cache
+        run: $(go env GOPATH)/bin/golangci-lint run --timeout 5m
 
       - name: Run tests
         run: |
           go test -v ./... -coverprofile=coverage.out
-
-      - name: Validate test coverage
-        run: |
-          go tool cover -func=coverage.out | grep total | awk '{print $3}'
