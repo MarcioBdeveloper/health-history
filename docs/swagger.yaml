@@ -6,6 +6,86 @@ info:
   title: Health History API
   version: "1.0"
 paths:
+  /medications:
+    get:
+      description: Return person list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: List medications
+      tags:
+      - medications
+    post:
+      consumes:
+      - application/json
+      description: Create a new medication
+      parameters:
+      - description: Data of medication
+        in: body
+        name: medication
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create medication
+      tags:
+      - medications
+  /medications/:id:
+    get:
+      description: Return medication by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Return medication
+      tags:
+      - medications
+    put:
+      consumes:
+      - application/json
+      description: Update a exist medication
+      parameters:
+      - description: Data of medication
+        in: body
+        name: medication
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update  medication
+      tags:
+      - medications
   /persons:
     get:
       description: Return person list
