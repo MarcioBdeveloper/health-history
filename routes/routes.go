@@ -9,7 +9,7 @@ import (
 func SetupRoutes(r *gin.Engine) {
 	personController := controllers.NewPersonController()
 
-	personRoute := r.Group("/persons")
+	personRoute := r.Group("/api/v1/persons")
 	personRoute.GET("/:id", personController.GetPersonById)
 	personRoute.GET("/", personController.GetAllPersons)
 	personRoute.POST("/", personController.CreatePerson)

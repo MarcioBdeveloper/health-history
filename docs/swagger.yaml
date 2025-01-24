@@ -1,0 +1,89 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact: {}
+  description: The objective this application is save history medicaments of person.
+  title: Health History API
+  version: "1.0"
+paths:
+  /persons:
+    get:
+      description: Return person list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: List persons
+      tags:
+      - persons
+    post:
+      consumes:
+      - application/json
+      description: Create a new person
+      parameters:
+      - description: Data of person
+        in: body
+        name: person
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create person
+      tags:
+      - persons
+  /persons/:id:
+    get:
+      description: Return person by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Return person
+      tags:
+      - persons
+    put:
+      consumes:
+      - application/json
+      description: Update a exist person
+      parameters:
+      - description: Data of person
+        in: body
+        name: person
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update  person
+      tags:
+      - persons
+swagger: "2.0"
