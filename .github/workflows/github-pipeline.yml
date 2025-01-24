@@ -1,0 +1,43 @@
+name: Health History Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: Validate Code and Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.22
+
+      - name: Install dependencies
+        run: |
+          go mod tidy
+
+      - name: Check code formatting
+        run: |
+          gofmt -l ./
+        continue-on-error: false
+
+      - name: Run linters
+        run: |
+          golangci-lint run --timeout 5m
+        env:
+          GOLANGCI_LINT_CACHE: ${{ runner.temp }}/golangci-lint-cache
+
+      - name: Run tests
+        run: |
+          go test -v ./... -coverprofile=coverage.out
+
+      - name: Validate test coverage
+        run: |
+          go tool cover -func=coverage.out | grep total | awk '{print $3}'
