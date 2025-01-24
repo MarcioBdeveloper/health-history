@@ -15,18 +15,6 @@ var DB *gorm.DB
 
 func ConnectDatabase() {
 
-	dsnDefault := "host=localhost user=postgres password=postgres dbname=postgres port=5432 sslmode=disable"
-	databaseName := "db_health_history"
-
-	tempDB, err := gorm.Open(postgres.Open(dsnDefault), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
-
-	if err := tempDB.Exec(fmt.Sprintf("CREATE DATABASE %s;", databaseName)).Error; err != nil {
-		fmt.Println("Database already exists or cannot be created:", err)
-	}
-
 	errload := godotenv.Load()
 	if errload != nil {
 		log.Printf("Warning: Could not load .env file. Using system environment variables.")
