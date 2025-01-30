@@ -9,6 +9,7 @@ import (
 func SetupRoutes(r *gin.Engine) {
 	personController := controllers.NewPersonController()
 	medicationController := controllers.NewMedicationController()
+	diagnosticController := controllers.NewDiagnosticController()
 
 	personRoute := r.Group("/api/v1/persons")
 	personRoute.GET("/:id", personController.GetPersonById)
@@ -23,4 +24,11 @@ func SetupRoutes(r *gin.Engine) {
 	medicationRoute.POST("/", medicationController.CreateMedication)
 	medicationRoute.PUT("/:id", medicationController.UpdateMedication)
 	medicationRoute.DELETE("/:id", medicationController.DeleteMedication)
+
+	diagnosticRoute := r.Group("/api/v1/diagnostics")
+	diagnosticRoute.GET("/:id", diagnosticController.GetDiagnosticById)
+	diagnosticRoute.GET("/", diagnosticController.GetAllDiagnostics)
+	diagnosticRoute.POST("/", diagnosticController.CreateDiagnostic)
+	diagnosticRoute.PUT("/:id", diagnosticController.UpdateDiagnostic)
+	diagnosticRoute.DELETE("/:id", diagnosticController.DeleteDiagnostic)
 }

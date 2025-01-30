@@ -24,8 +24,9 @@ func NewMedicationController() *MedicationController {
 // @Tags medications
 // @Accept json
 // @Produce json
-// @Param medication body map[string]string true "Data of medication"
-// @Success 201 {object} map[string]string
+// @Param request body requests.MedicationRequest true "Data of medication"
+// @Success 201 {object} models.Medication "Successful response"
+// @Failure 400 {object} map[string]string "Validation error"
 // @Router /medications [post]
 func (pc *MedicationController) CreateMedication(c *gin.Context) {
 	var medicationRequest requests.MedicationRequest
@@ -60,8 +61,10 @@ func (pc *MedicationController) CreateMedication(c *gin.Context) {
 // @Tags medications
 // @Accept json
 // @Produce json
-// @Param medication body map[string]string true "Data of medication"
-// @Success 200 {object} map[string]string
+// @Param request body requests.MedicationRequest true "Data of medication"
+// @Param id path int true "Medication ID" example(1)
+// @Success 200 {object} models.Medication "Successful response"
+// @Failure 400 {object} map[string]string "Validation error"
 // @Router /medications/:id [put]
 func (pc *MedicationController) UpdateMedication(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
@@ -101,7 +104,8 @@ func (pc *MedicationController) UpdateMedication(c *gin.Context) {
 // @Description Delete a medication by id
 // @Tags medications
 // @Produce json
-// @Success 204 {array} string
+// @Param id path int true "Medication ID" example(1)
+// @Success 204
 // @Router /medications/:id [get]
 func (pc *MedicationController) DeleteMedication(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
@@ -123,7 +127,9 @@ func (pc *MedicationController) DeleteMedication(c *gin.Context) {
 // @Description Return medication by id
 // @Tags medications
 // @Produce json
-// @Success 200 {array} string
+// @Param id path int true "Medication ID" example(1)
+// @Success 200 {object} models.Medication "Successful response"
+// @Failure 404 {object} map[string]string "Medication not found"
 // @Router /medications/:id [get]
 func (pc *MedicationController) GetMedicationById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
@@ -143,10 +149,10 @@ func (pc *MedicationController) GetMedicationById(c *gin.Context) {
 
 // GetAllMedications return medication list
 // @Summary List medications
-// @Description Return person list
+// @Description Return medication list
 // @Tags medications
 // @Produce json
-// @Success 200 {array} string
+// @Success 200 {array} models.Medication "Successful response"
 // @Router /medications [get]
 func (pc *MedicationController) GetAllMedications(c *gin.Context) {
 	medications, err := pc.MedicationRepository.GetAllMedications()

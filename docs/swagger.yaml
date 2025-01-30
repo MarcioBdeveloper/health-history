@@ -1,4 +1,130 @@
 basePath: /api/v1
+definitions:
+  models.Diagnostic:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      doctor_id:
+        type: string
+      id:
+        type: integer
+      patient_id:
+        type: string
+      symptoms:
+        items:
+          type: string
+        type: array
+      updatedAt:
+        type: string
+    required:
+    - description
+    - doctor_id
+    - patient_id
+    - symptoms
+    type: object
+  models.Medication:
+    properties:
+      activeIngredient:
+        type: string
+      companyHoldingRegistration:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      registrationNumber:
+        type: string
+      regulatoryCategory:
+        type: string
+      therapeuticClass:
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - activeIngredient
+    - companyHoldingRegistration
+    - name
+    - registrationNumber
+    - regulatoryCategory
+    - therapeuticClass
+    type: object
+  models.Person:
+    properties:
+      age:
+        type: integer
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - age
+    - name
+    type: object
+  requests.DiagnosticRequest:
+    properties:
+      description:
+        example: Patient has a mild fever
+        type: string
+      doctor_id:
+        example: "1"
+        type: string
+      patient_id:
+        example: "1"
+        type: string
+      symptoms:
+        example:
+        - '[''cough'''
+        - ' ''headache'''
+        - ' ''fever'']'
+        items:
+          type: string
+        type: array
+    required:
+    - description
+    - doctor_id
+    - patient_id
+    - symptoms
+    type: object
+  requests.MedicationRequest:
+    properties:
+      CompanyHoldingRegistration:
+        type: string
+      activeIngredient:
+        type: string
+      name:
+        type: string
+      registrationNumber:
+        type: string
+      regulatoryCategory:
+        type: string
+      therapeuticClass:
+        type: string
+    required:
+    - CompanyHoldingRegistration
+    - activeIngredient
+    - name
+    - registrationNumber
+    - regulatoryCategory
+    - therapeuticClass
+    type: object
+  requests.PersonRequest:
+    properties:
+      age:
+        type: integer
+      name:
+        type: string
+    required:
+    - age
+    - name
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -6,7 +132,7 @@ info:
   title: Health History API
   version: "1.0"
 paths:
-  /medications:
+  /diagnostics:
     get:
       description: Return person list
       produces:
@@ -16,7 +142,102 @@ paths:
           description: OK
           schema:
             items:
+              $ref: '#/definitions/models.Diagnostic'
+            type: array
+      summary: List diagnostics
+      tags:
+      - diagnostics
+    post:
+      consumes:
+      - application/json
+      description: Create a new diagnostic
+      parameters:
+      - description: Data of diagnostic
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.DiagnosticRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Diagnostic'
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties:
               type: string
+            type: object
+      summary: Create diagnostic
+      tags:
+      - diagnostics
+  /diagnostics/:id:
+    get:
+      description: Return diagnostic by id
+      parameters:
+      - description: Diagnostic ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Diagnostic'
+        "404":
+          description: Diagnostic not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Return diagnostic
+      tags:
+      - diagnostics
+    put:
+      consumes:
+      - application/json
+      description: Update a exist diagnostic
+      parameters:
+      - description: Data of diagnostic
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.DiagnosticRequest'
+      - description: Diagnostic ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Diagnostic'
+      summary: Update  diagnostic
+      tags:
+      - diagnostics
+  /medications:
+    get:
+      description: Return medication list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            items:
+              $ref: '#/definitions/models.Medication'
             type: array
       summary: List medications
       tags:
@@ -28,17 +249,19 @@ paths:
       parameters:
       - description: Data of medication
         in: body
-        name: medication
+        name: request
         required: true
         schema:
-          additionalProperties:
-            type: string
-          type: object
+          $ref: '#/definitions/requests.MedicationRequest'
       produces:
       - application/json
       responses:
         "201":
-          description: Created
+          description: Successful response
+          schema:
+            $ref: '#/definitions/models.Medication'
+        "400":
+          description: Validation error
           schema:
             additionalProperties:
               type: string
@@ -49,15 +272,26 @@ paths:
   /medications/:id:
     get:
       description: Return medication by id
+      parameters:
+      - description: Medication ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Successful response
           schema:
-            items:
+            $ref: '#/definitions/models.Medication'
+        "404":
+          description: Medication not found
+          schema:
+            additionalProperties:
               type: string
-            type: array
+            type: object
       summary: Return medication
       tags:
       - medications
@@ -68,17 +302,25 @@ paths:
       parameters:
       - description: Data of medication
         in: body
-        name: medication
+        name: request
         required: true
         schema:
-          additionalProperties:
-            type: string
-          type: object
+          $ref: '#/definitions/requests.MedicationRequest'
+      - description: Medication ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Successful response
+          schema:
+            $ref: '#/definitions/models.Medication'
+        "400":
+          description: Validation error
           schema:
             additionalProperties:
               type: string
@@ -93,10 +335,10 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Successful response
           schema:
             items:
-              type: string
+              $ref: '#/definitions/models.Person'
             type: array
       summary: List persons
       tags:
@@ -108,17 +350,19 @@ paths:
       parameters:
       - description: Data of person
         in: body
-        name: person
+        name: request
         required: true
         schema:
-          additionalProperties:
-            type: string
-          type: object
+          $ref: '#/definitions/requests.PersonRequest'
       produces:
       - application/json
       responses:
         "201":
-          description: Created
+          description: Successful response
+          schema:
+            $ref: '#/definitions/models.Person'
+        "400":
+          description: Validation error
           schema:
             additionalProperties:
               type: string
@@ -129,15 +373,26 @@ paths:
   /persons/:id:
     get:
       description: Return person by id
+      parameters:
+      - description: Person ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Successful response
           schema:
-            items:
+            $ref: '#/definitions/models.Person'
+        "404":
+          description: Person not found
+          schema:
+            additionalProperties:
               type: string
-            type: array
+            type: object
       summary: Return person
       tags:
       - persons
@@ -148,17 +403,25 @@ paths:
       parameters:
       - description: Data of person
         in: body
-        name: person
+        name: request
         required: true
         schema:
-          additionalProperties:
-            type: string
-          type: object
+          $ref: '#/definitions/requests.PersonRequest'
+      - description: Mdication ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Successful response
+          schema:
+            $ref: '#/definitions/models.Person'
+        "400":
+          description: Validation error
           schema:
             additionalProperties:
               type: string
