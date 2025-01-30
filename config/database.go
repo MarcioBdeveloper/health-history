@@ -39,7 +39,7 @@ func ConnectDatabase() {
 }
 
 func Migrate() {
-	err := DB.AutoMigrate(&models.Person{}, &models.Medication{}, &models.Diagnostic{})
+	err := DB.AutoMigrate(&models.Person{}, &models.Medication{}, &models.Diagnostic{}, &models.Symptom{})
 	if err != nil {
 		log.Fatalf("Failed to run migrations: %v", err)
 	}

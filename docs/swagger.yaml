@@ -68,6 +68,19 @@ definitions:
     - age
     - name
     type: object
+  models.Symptom:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - name
+    type: object
   requests.DiagnosticRequest:
     properties:
       description:
@@ -123,6 +136,14 @@ definitions:
         type: string
     required:
     - age
+    - name
+    type: object
+  requests.SymptomRequest:
+    properties:
+      name:
+        example: fever
+        type: string
+    required:
     - name
     type: object
 host: localhost:8080
@@ -429,4 +450,99 @@ paths:
       summary: Update  person
       tags:
       - persons
+  /symptoms:
+    get:
+      description: Return person list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Symptom'
+            type: array
+      summary: List symptoms
+      tags:
+      - symptoms
+    post:
+      consumes:
+      - application/json
+      description: Create a new symptom
+      parameters:
+      - description: Data of symptom
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SymptomRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Symptom'
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create symptom
+      tags:
+      - symptoms
+  /symptoms/:id:
+    get:
+      description: Return symptom by id
+      parameters:
+      - description: Symptom ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Symptom'
+        "404":
+          description: Symptom not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Return symptom
+      tags:
+      - symptoms
+    put:
+      consumes:
+      - application/json
+      description: Update a exist symptom
+      parameters:
+      - description: Data of symptom
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SymptomRequest'
+      - description: Symptom ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Symptom'
+      summary: Update  symptom
+      tags:
+      - symptoms
 swagger: "2.0"

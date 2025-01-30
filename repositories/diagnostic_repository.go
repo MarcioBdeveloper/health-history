@@ -32,7 +32,7 @@ func (r *DiagnosticRepository) GetDiagnosticById(id int) (*models.Diagnostic, er
 }
 
 func (r *DiagnosticRepository) GetAllDiagnostics() ([]models.Diagnostic, error) {
-	var medications []models.Diagnostic
-	result := config.DB.Find(&medications)
-	return medications, result.Error
+	var diagnostics []models.Diagnostic
+	result := config.DB.Find(&diagnostics)
+	return diagnostics, result.Error
 }

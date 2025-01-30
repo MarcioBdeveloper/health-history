@@ -10,6 +10,7 @@ func SetupRoutes(r *gin.Engine) {
 	personController := controllers.NewPersonController()
 	medicationController := controllers.NewMedicationController()
 	diagnosticController := controllers.NewDiagnosticController()
+	symptomController := controllers.NewSymptomController()
 
 	personRoute := r.Group("/api/v1/persons")
 	personRoute.GET("/:id", personController.GetPersonById)
@@ -31,4 +32,11 @@ func SetupRoutes(r *gin.Engine) {
 	diagnosticRoute.POST("/", diagnosticController.CreateDiagnostic)
 	diagnosticRoute.PUT("/:id", diagnosticController.UpdateDiagnostic)
 	diagnosticRoute.DELETE("/:id", diagnosticController.DeleteDiagnostic)
+
+	symptomRoute := r.Group("/api/v1/symptoms")
+	symptomRoute.GET("/:id", symptomController.GetSymptomById)
+	symptomRoute.GET("/", symptomController.GetAllSymptoms)
+	symptomRoute.POST("/", symptomController.CreateSymptom)
+	symptomRoute.PUT("/:id", symptomController.UpdateSymptom)
+	symptomRoute.DELETE("/:id", symptomController.DeleteSymptom)
 }
