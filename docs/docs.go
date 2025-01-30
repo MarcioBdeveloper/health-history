@@ -461,6 +461,149 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/symptoms": {
+            "get": {
+                "description": "Return person list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "symptoms"
+                ],
+                "summary": "List symptoms",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Symptom"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new symptom",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "symptoms"
+                ],
+                "summary": "Create symptom",
+                "parameters": [
+                    {
+                        "description": "Data of symptom",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.SymptomRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Symptom"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/symptoms/:id": {
+            "get": {
+                "description": "Return symptom by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "symptoms"
+                ],
+                "summary": "Return symptom",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "Symptom ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Symptom"
+                        }
+                    },
+                    "404": {
+                        "description": "Symptom not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a exist symptom",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "symptoms"
+                ],
+                "summary": "Update  symptom",
+                "parameters": [
+                    {
+                        "description": "Data of symptom",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.SymptomRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "Symptom ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Symptom"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -563,6 +706,26 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Symptom": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.DiagnosticRequest": {
             "type": "object",
             "required": [
@@ -640,6 +803,18 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "requests.SymptomRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "fever"
                 }
             }
         }
