@@ -52,6 +52,40 @@ definitions:
     - regulatoryCategory
     - therapeuticClass
     type: object
+  models.MedicationDosages:
+    properties:
+      dosage:
+        type: string
+      medication_id:
+        type: integer
+    required:
+    - dosage
+    - medication_id
+    type: object
+  models.MedicationPrescription:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      doctor_id:
+        type: string
+      id:
+        type: integer
+      medication_and_dosages:
+        items:
+          $ref: '#/definitions/models.MedicationDosages'
+        type: array
+      patient_id:
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - description
+    - doctor_id
+    - medication_and_dosages
+    - patient_id
+    type: object
   models.Person:
     properties:
       age:
@@ -105,6 +139,34 @@ definitions:
     - doctor_id
     - patient_id
     - symptoms
+    type: object
+  requests.MedicationDosagesRequest:
+    properties:
+      dosage:
+        type: string
+      medication_id:
+        type: integer
+    required:
+    - dosage
+    - medication_id
+    type: object
+  requests.MedicationPrescriptionRequest:
+    properties:
+      doctor_id:
+        type: string
+      name:
+        type: string
+      patient_id:
+        type: string
+      registrationNumber:
+        items:
+          $ref: '#/definitions/requests.MedicationDosagesRequest'
+        type: array
+    required:
+    - doctor_id
+    - name
+    - patient_id
+    - registrationNumber
     type: object
   requests.MedicationRequest:
     properties:
@@ -248,6 +310,107 @@ paths:
       summary: Update  diagnostic
       tags:
       - diagnostics
+  /medicationprescriptions:
+    get:
+      description: Return medicationprescription list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            items:
+              $ref: '#/definitions/models.Medication'
+            type: array
+      summary: List medicationprescriptions
+      tags:
+      - medicationprescriptions
+    post:
+      consumes:
+      - application/json
+      description: Create a new medicationprescription
+      parameters:
+      - description: Data of medicationprescription
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.MedicationPrescriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successful response
+          schema:
+            $ref: '#/definitions/models.MedicationPrescription'
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create medicationprescription
+      tags:
+      - medicationprescriptions
+  /medicationprescriptions/:id:
+    get:
+      description: Return medicationprescription by id
+      parameters:
+      - description: MedicationPrescription ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            $ref: '#/definitions/models.MedicationPrescription'
+        "404":
+          description: Medication prescription not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Return medicationprescription
+      tags:
+      - medicationprescriptions
+    put:
+      consumes:
+      - application/json
+      description: Update a exist medicationprescription
+      parameters:
+      - description: Data of medicationprescription
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.MedicationRequest'
+      - description: MedicationPrescription ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            $ref: '#/definitions/models.MedicationPrescription'
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update  medicationprescription
+      tags:
+      - medicationprescriptions
   /medications:
     get:
       description: Return medication list

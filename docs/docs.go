@@ -158,6 +158,158 @@ const docTemplate = `{
                 }
             }
         },
+        "/medicationprescriptions": {
+            "get": {
+                "description": "Return medicationprescription list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicationprescriptions"
+                ],
+                "summary": "List medicationprescriptions",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Medication"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new medicationprescription",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicationprescriptions"
+                ],
+                "summary": "Create medicationprescription",
+                "parameters": [
+                    {
+                        "description": "Data of medicationprescription",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.MedicationPrescriptionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/models.MedicationPrescription"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/medicationprescriptions/:id": {
+            "get": {
+                "description": "Return medicationprescription by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicationprescriptions"
+                ],
+                "summary": "Return medicationprescription",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "MedicationPrescription ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/models.MedicationPrescription"
+                        }
+                    },
+                    "404": {
+                        "description": "Medication prescription not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a exist medicationprescription",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicationprescriptions"
+                ],
+                "summary": "Update  medicationprescription",
+                "parameters": [
+                    {
+                        "description": "Data of medicationprescription",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.MedicationRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "MedicationPrescription ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/models.MedicationPrescription"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/medications": {
             "get": {
                 "description": "Return medication list",
@@ -682,6 +834,56 @@ const docTemplate = `{
                 }
             }
         },
+        "models.MedicationDosages": {
+            "type": "object",
+            "required": [
+                "dosage",
+                "medication_id"
+            ],
+            "properties": {
+                "dosage": {
+                    "type": "string"
+                },
+                "medication_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.MedicationPrescription": {
+            "type": "object",
+            "required": [
+                "description",
+                "doctor_id",
+                "medication_and_dosages",
+                "patient_id"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "doctor_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "medication_and_dosages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.MedicationDosages"
+                    }
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Person": {
             "type": "object",
             "required": [
@@ -757,6 +959,47 @@ const docTemplate = `{
                         " 'headache'",
                         " 'fever']"
                     ]
+                }
+            }
+        },
+        "requests.MedicationDosagesRequest": {
+            "type": "object",
+            "required": [
+                "dosage",
+                "medication_id"
+            ],
+            "properties": {
+                "dosage": {
+                    "type": "string"
+                },
+                "medication_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requests.MedicationPrescriptionRequest": {
+            "type": "object",
+            "required": [
+                "doctor_id",
+                "name",
+                "patient_id",
+                "registrationNumber"
+            ],
+            "properties": {
+                "doctor_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "registrationNumber": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requests.MedicationDosagesRequest"
+                    }
                 }
             }
         },
