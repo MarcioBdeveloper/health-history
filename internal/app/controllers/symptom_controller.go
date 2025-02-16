@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"health-history/models"
-	"health-history/repositories"
-	"health-history/requests"
+	"health-history/internal/app/models"
+	"health-history/internal/app/repositories"
+	"health-history/internal/app/requests"
 	"net/http"
 	"strconv"
 

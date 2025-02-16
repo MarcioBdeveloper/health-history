@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"health-history/config"
-	"health-history/models"
+	"health-history/internal/app/config"
+	"health-history/internal/app/models"
 )
 
 type MedicationRepository struct{}

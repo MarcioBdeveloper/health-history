@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"health-history/controllers"
+	"health-history/internal/app/controllers"
 
 	"github.com/gin-gonic/gin"
 )

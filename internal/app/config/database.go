@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"health-history/models"
+	"health-history/internal/app/models"
 	"log"
 	"os"
 

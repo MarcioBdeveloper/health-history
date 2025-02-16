@@ -1,9 +1,9 @@
 package main
 
 import (
-	"health-history/config"
 	_ "health-history/docs"
-	"health-history/routes"
+	"health-history/internal/app/config"
+	"health-history/internal/app/routes"
 	"log"
 
 	"github.com/gin-gonic/gin"
